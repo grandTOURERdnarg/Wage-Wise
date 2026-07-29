@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0f172a" />
-  <meta name="description" content="A simple UK wage, tax and real hourly earnings calculator." />
-  <title>Wage Wise — UK Wage Calculator</title>
+  <meta name="description" content="A public UK wage, overtime, leave and personal budget calculator." />
+  <title>Wage Wise — UK Wage & Budget Calculator</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -13,101 +13,230 @@
     <header class="site-header">
       <a class="brand" href="/" aria-label="Wage Wise home">
         <span class="brand-mark">W</span>
-        <span><strong>Wage Wise</strong><small>UK wage calculator</small></span>
+        <span><strong>Wage Wise</strong><small>UK pay and budget calculator</small></span>
       </a>
-      <button class="reset-button" id="resetButton" type="button">Reset</button>
+      <button class="secondary-button" id="resetButton" type="button">Reset calculator</button>
     </header>
 
     <section class="intro">
-      <p class="eyebrow">Know what you actually keep</p>
-      <h1>Your wage, tax and real hourly pay.</h1>
-      <p>Enter your pay and optional monthly costs. Every result updates instantly and nothing is saved.</p>
+      <p class="eyebrow">See the full picture</p>
+      <h1>Understand your pay, overtime, leave and monthly money.</h1>
+      <p>Enter your figures, then press <strong>Update calculation</strong>. Results are calculated in your browser and nothing is stored.</p>
     </section>
 
     <section class="calculator-grid" aria-label="Wage calculator">
       <article class="card inputs-card">
         <div class="card-heading">
           <div>
-            <p class="eyebrow">Your details</p>
-            <h2>Wage information</h2>
+            <p class="eyebrow">Your calculation</p>
+            <h2>Pay and working details</h2>
           </div>
         </div>
 
-        <div class="form-grid">
-          <label>
-            Pay type
-            <select id="payType">
-              <option value="annual">Annual salary</option>
-              <option value="monthly">Monthly salary</option>
-              <option value="weekly">Weekly wage</option>
-              <option value="hourly">Hourly wage</option>
-            </select>
-          </label>
+        <div class="subsection">
+          <h3>Standard pay</h3>
+          <div class="form-grid">
+            <label>
+              Pay type
+              <select id="payType">
+                <option value="annual">Annual salary</option>
+                <option value="monthly">Monthly salary</option>
+                <option value="weekly">Weekly wage</option>
+                <option value="hourly">Hourly wage</option>
+              </select>
+            </label>
 
-          <label id="payAmountLabel">
-            Annual salary (£)
-            <input id="payAmount" type="number" min="0" step="100" value="30000" inputmode="decimal" />
-          </label>
+            <label id="payAmountLabel">
+              Annual salary (£)
+              <input id="payAmount" type="number" min="0" step="100" value="30000" inputmode="decimal" />
+            </label>
 
-          <label>
-            Hours worked each week
-            <input id="hoursPerWeek" type="number" min="1" max="100" step="0.5" value="37.5" inputmode="decimal" />
-          </label>
+            <label>
+              Standard hours each week
+              <input id="hoursPerWeek" type="number" min="1" max="100" step="0.5" value="37.5" inputmode="decimal" />
+            </label>
 
-          <label>
-            Weeks worked each year
-            <input id="weeksPerYear" type="number" min="1" max="52" step="1" value="52" inputmode="numeric" />
-          </label>
+            <label>
+              Paid/contract weeks each year
+              <input id="weeksPerYear" type="number" min="1" max="52" step="1" value="52" inputmode="numeric" />
+            </label>
+          </div>
         </div>
 
-        <div class="expenses-box">
+        <div class="subsection tinted">
           <div class="section-title">
             <div>
-              <h3>Monthly costs <span>optional</span></h3>
-              <p>Use totals or split them into a few simple groups.</p>
+              <h3>Overtime and leave</h3>
+              <p>Overtime is treated as extra taxable employment income.</p>
             </div>
-            <strong id="monthlyCostsTotal">£0</strong>
+          </div>
+          <div class="form-grid">
+            <label>
+              Overtime hours each working week
+              <input id="overtimeHours" type="number" min="0" max="80" step="0.5" value="0" inputmode="decimal" />
+            </label>
+
+            <label>
+              Overtime hourly rate (£)
+              <input id="overtimeRate" type="number" min="0" step="0.01" value="0" inputmode="decimal" />
+            </label>
+
+            <label>
+              Leave weeks each year
+              <input id="leaveWeeks" type="number" min="0" max="52" step="0.5" value="5.6" inputmode="decimal" />
+            </label>
+
+            <label>
+              Is that leave paid?
+              <select id="leavePaid">
+                <option value="yes">Yes — paid leave</option>
+                <option value="no">No — unpaid leave</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div class="subsection costs-section">
+          <div class="section-title">
+            <div>
+              <h3>Monthly spending <span>optional</span></h3>
+              <p>Add your real monthly costs for personalised guidance.</p>
+            </div>
+            <strong id="monthlyCostsPreview">£0</strong>
           </div>
 
           <div class="expense-grid">
             <label>Rent or mortgage<input id="housingCost" type="number" min="0" step="1" value="0" inputmode="decimal" /></label>
             <label>Council Tax<input id="councilTaxCost" type="number" min="0" step="1" value="0" inputmode="decimal" /></label>
-            <label>Bills and food<input id="livingCost" type="number" min="0" step="1" value="0" inputmode="decimal" /></label>
-            <label>Other monthly costs<input id="otherCost" type="number" min="0" step="1" value="0" inputmode="decimal" /></label>
+            <label>Food and household<input id="foodCost" type="number" min="0" step="1" value="0" inputmode="decimal" /></label>
+            <label>Gas, electric, water and internet<input id="utilitiesCost" type="number" min="0" step="1" value="0" inputmode="decimal" /></label>
+            <label>Travel and transport<input id="transportCost" type="number" min="0" step="1" value="0" inputmode="decimal" /></label>
+            <label>Debt repayments<input id="debtCost" type="number" min="0" step="1" value="0" inputmode="decimal" /></label>
+            <label>Subscriptions and entertainment<input id="subscriptionsCost" type="number" min="0" step="1" value="0" inputmode="decimal" /></label>
+            <label>Other monthly spending<input id="otherCost" type="number" min="0" step="1" value="0" inputmode="decimal" /></label>
           </div>
         </div>
 
-        <p class="notice">Estimate for the 2026/27 tax year using standard employee rates for England, Wales and Northern Ireland. Pensions, student loans and other deductions are not included.</p>
+        <div class="calculate-row">
+          <button class="primary-button" id="calculateButton" type="button">Update calculation</button>
+          <span class="calculation-status" id="calculationStatus">Enter your figures, then update.</span>
+        </div>
+
+        <p class="notice">Estimate for the 2026/27 tax year using standard employee Income Tax rates for England, Wales and Northern Ireland and employee National Insurance category A. Pensions, student loans, benefits, tax-code changes and salary sacrifice are not included.</p>
       </article>
 
       <article class="card results-card" aria-live="polite">
         <p class="eyebrow light">Estimated take-home pay</p>
         <div class="headline-result">
           <span>Each month</span>
-          <strong id="netMonth">£0</strong>
-          <small id="netMonthAfterCosts">£0 after monthly costs</small>
+          <strong id="netMonth">—</strong>
+          <small id="netMonthAfterCosts">Press update to calculate</small>
         </div>
 
         <div class="result-list">
-          <div><span>Gross yearly</span><strong id="grossYear">£0</strong></div>
-          <div><span>Income Tax</span><strong id="taxYear">−£0</strong></div>
-          <div><span>National Insurance</span><strong id="niYear">−£0</strong></div>
-          <div class="total-row"><span>Take-home yearly</span><strong id="netYear">£0</strong></div>
-          <div><span>Take-home weekly</span><strong id="netWeek">£0</strong></div>
-          <div><span>Take-home hourly</span><strong id="netHour">£0.00</strong></div>
-          <div class="real-row"><span>Real hourly pay after costs</span><strong id="realHour">£0.00</strong></div>
+          <div><span>Base yearly pay</span><strong id="baseGrossYear">—</strong></div>
+          <div><span>Overtime pay</span><strong id="overtimeGrossYear">—</strong></div>
+          <div><span>Total gross yearly</span><strong id="grossYear">—</strong></div>
+          <div><span>Income Tax</span><strong id="taxYear">—</strong></div>
+          <div><span>National Insurance</span><strong id="niYear">—</strong></div>
+          <div class="total-row"><span>Take-home yearly</span><strong id="netYear">—</strong></div>
+          <div><span>Take-home weekly</span><strong id="netWeek">—</strong></div>
+          <div><span>Take-home per paid hour</span><strong id="netHour">—</strong></div>
+          <div class="real-row"><span>Real hourly pay after costs</span><strong id="realHour">—</strong></div>
         </div>
 
         <div class="simple-breakdown">
-          <div><span>Tax and NI</span><strong id="deductionPercent">0%</strong></div>
-          <div><span>Monthly costs</span><strong id="costPercent">0%</strong></div>
-          <div><span>Left after costs</span><strong id="remainingYear">£0/year</strong></div>
+          <div><span>Tax and NI</span><strong id="deductionPercent">—</strong></div>
+          <div><span>Monthly costs</span><strong id="costPercent">—</strong></div>
+          <div><span>Left each month</span><strong id="remainingMonth">—</strong></div>
         </div>
       </article>
     </section>
 
+    <section class="insights hidden" id="insightsSection">
+      <div class="section-heading-wide">
+        <div>
+          <p class="eyebrow">Your money dashboard</p>
+          <h2>What your calculation means</h2>
+        </div>
+        <p>These figures are generated only from the details currently entered above.</p>
+      </div>
+
+      <div class="snapshot-grid">
+        <article class="snapshot-card"><span>Gross each month</span><strong id="grossMonthBox">£0</strong><small>before tax and NI</small></article>
+        <article class="snapshot-card"><span>Overtime kept</span><strong id="overtimeNetBox">£0</strong><small>estimated yearly after extra tax and NI</small></article>
+        <article class="snapshot-card"><span>Paid leave value</span><strong id="leaveValueBox">£0</strong><small id="leaveValueNote">included in your pay</small></article>
+        <article class="snapshot-card"><span>Essential costs</span><strong id="essentialCostsBox">£0</strong><small>each month</small></article>
+        <article class="snapshot-card"><span>Available after costs</span><strong id="availableBox">£0</strong><small>each month</small></article>
+        <article class="snapshot-card"><span>Three-month safety fund</span><strong id="emergencyFundBox">£0</strong><small>based on essential spending</small></article>
+      </div>
+
+      <div class="charts-grid">
+        <article class="info-card chart-card">
+          <div class="card-heading compact-heading">
+            <div><p class="eyebrow">Yearly income split</p><h3>Where your gross pay goes</h3></div>
+          </div>
+          <div class="donut-layout">
+            <div class="donut" id="incomeDonut"><div><strong id="donutRemaining">0%</strong><span>left after costs</span></div></div>
+            <div class="legend" id="incomeLegend"></div>
+          </div>
+        </article>
+
+        <article class="info-card chart-card">
+          <div class="card-heading compact-heading">
+            <div><p class="eyebrow">Monthly comparison</p><h3>Income and spending</h3></div>
+          </div>
+          <div class="bar-chart" id="monthlyBars"></div>
+        </article>
+
+        <article class="info-card chart-card">
+          <div class="card-heading compact-heading">
+            <div><p class="eyebrow">Overtime impact</p><h3>Extra work versus extra money</h3></div>
+          </div>
+          <div class="overtime-chart">
+            <div><span>Overtime gross</span><strong id="overtimeGrossChart">£0</strong></div>
+            <div class="overtime-track"><span id="overtimeKeepBar"></span></div>
+            <div class="overtime-chart-footer"><span>Estimated kept after tax and NI</span><strong id="overtimeNetChart">£0</strong></div>
+          </div>
+        </article>
+      </div>
+
+      <div class="content-grid">
+        <article class="info-card budget-card">
+          <div class="card-heading compact-heading">
+            <div><p class="eyebrow">Personal budget idea</p><h3>A starting plan for your monthly take-home</h3></div>
+          </div>
+          <div class="budget-boxes">
+            <div><span>Current essentials</span><strong id="budgetEssentials">£0</strong><small id="budgetEssentialsPct">0% of take-home</small></div>
+            <div><span>Suggested savings</span><strong id="budgetSavings">£0</strong><small>based on what remains</small></div>
+            <div><span>Flexible spending</span><strong id="budgetFlexible">£0</strong><small>after costs and suggested saving</small></div>
+            <div><span>Emergency fund goal</span><strong id="budgetEmergency">£0</strong><small>three months of essentials</small></div>
+          </div>
+          <div class="budget-meter">
+            <div><span id="budgetNeedsBar"></span><span id="budgetWantsBar"></span><span id="budgetSavingsBar"></span></div>
+            <p><span class="dot needs"></span>Costs <span class="dot wants"></span>Flexible <span class="dot savings"></span>Savings</p>
+          </div>
+          <ul class="tips-list" id="personalTips"></ul>
+        </article>
+
+        <article class="info-card explanation-card">
+          <div class="card-heading compact-heading">
+            <div><p class="eyebrow">Why the result changed</p><h3>How your figures were produced</h3></div>
+          </div>
+          <ul class="explanation-list" id="calculationReasons"></ul>
+        </article>
+      </div>
+
+      <div class="useful-grid">
+        <article class="useful-card"><strong>Overtime is taxed with normal pay</strong><p>Extra overtime raises your gross income. The amount you keep depends on the tax and National Insurance bands your total income reaches.</p></article>
+        <article class="useful-card"><strong>Paid leave can raise your effective hourly value</strong><p>When leave is paid, you receive normal pay for leave time without working those hours. Unpaid leave reduces your estimated gross pay.</p></article>
+        <article class="useful-card"><strong>Real hourly pay includes your spending</strong><p>This app divides the money left after tax and entered yearly costs by the hours you actually work, including overtime.</p></article>
+        <article class="useful-card"><strong>Use the result as an estimate</strong><p>Your tax code, pension, student loan, bonuses, benefits and payroll timing can make your real payslip different.</p></article>
+      </div>
+    </section>
+
     <footer>
-      Wage Wise gives estimates only. Your actual payslip may differ because of your tax code or other deductions.
+      Wage Wise stores no personal or financial data. Refreshing or closing the page clears the calculation.
     </footer>
   </main>
 
