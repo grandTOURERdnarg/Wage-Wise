@@ -3,177 +3,338 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0b1220" />
-  <meta name="description" content="A browser-based UK pay, pension, car and mortgage estimation dashboard." />
-  <title>Wage Wise — Personal Finance Dashboard</title>
-  <link rel="stylesheet" href="styles-v2.css" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="description" content="A clear UK pay, pension, car and mortgage estimation dashboard." />
+  <title>Wage Wise — Personal Finance Calculator</title>
+  <link rel="stylesheet" href="styles-v3.css" />
 </head>
 <body>
-  <header class="market-header">
-    <a class="brand" href="/" aria-label="Wage Wise home"><span class="brand-mark">W</span><span><strong>Wage Wise</strong><small>Personal finance dashboard</small></span></a>
-    <div class="header-badges"><span>Tax year 2026/27</span><span>England, Wales & NI</span><span class="privacy">No saved data</span></div>
-    <button id="resetButton" class="button secondary" type="button">Reset</button>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/" aria-label="Wage Wise home">
+        <span class="brand-mark">W</span>
+        <span><strong>Wage Wise</strong><small>Personal finance calculator</small></span>
+      </a>
+      <div class="header-badges">
+        <span>2026/27 estimate</span>
+        <span>England, Wales & NI</span>
+        <span class="privacy">Nothing saved</span>
+      </div>
+      <button id="resetButton" class="button secondary" type="button">Reset</button>
+    </div>
   </header>
 
-  <main class="terminal-shell">
-    <aside class="side-nav" aria-label="Calculator sections">
-      <button class="nav-tab active" data-tab="pay"><span>01</span><strong>Your pay</strong><small>Normal wage and working pattern</small></button>
-      <button class="nav-tab" data-tab="overtime"><span>02</span><strong>Overtime & leave</strong><small>Extra work and time off</small></button>
-      <button class="nav-tab" data-tab="spending"><span>03</span><strong>Monthly spending</strong><small>What regularly leaves your account</small></button>
-      <button class="nav-tab" data-tab="pension"><span>04</span><strong>Pension</strong><small>You, employer and retirement target</small></button>
-      <button class="nav-tab" data-tab="results"><span>05</span><strong>Pay results</strong><small>Hourly to five-year figures</small></button>
-      <button class="nav-tab" data-tab="projections"><span>06</span><strong>Future projections</strong><small>Income and pension charts</small></button>
-      <button class="nav-tab" data-tab="car"><span>07</span><strong>Car costs</strong><small>Full ownership or finance cost</small></button>
-      <button class="nav-tab" data-tab="mortgage"><span>08</span><strong>Mortgage estimate</strong><small>Illustrative borrowing position</small></button>
-      <button class="nav-tab" data-tab="budget"><span>09</span><strong>Budget guidance</strong><small>Money left and practical ideas</small></button>
-      <button class="nav-tab" data-tab="resources"><span>10</span><strong>Helpful resources</strong><small>Official UK support and tools</small></button>
-    </aside>
-
-    <section class="workspace">
-      <div id="messageArea" class="message-area" aria-live="polite"></div>
-
-      <section class="tab-panel active" data-panel="pay">
-        <div class="panel-heading"><div><p class="kicker">Income setup</p><h1>Start with your normal pay</h1><p>Use the figures from your contract or payslip. Help text explains exactly how each input is used.</p></div><div class="status-chip">Step 1</div></div>
-        <div class="form-grid">
-          <label>Pay type<select id="payType"><option value="annual">Annual salary</option><option value="monthly">Monthly salary</option><option value="weekly">Weekly wage</option><option value="hourly">Hourly wage</option></select><small>Choose how your normal pay is quoted.</small></label>
-          <label id="payAmountLabel">Annual salary (£)<input id="payAmount" type="number" min="0" step="100" value="30000" /><small id="payAmountHelp">Your yearly contractual salary before deductions.</small></label>
-          <label>Payroll frequency<select id="payFrequency"><option value="monthly">Paid monthly</option><option value="weekly">Paid weekly</option></select><small>Used for the National Insurance estimate.</small></label>
-          <label>Standard hours each week<input id="hoursPerWeek" type="number" min="0.1" max="100" step="0.5" value="37.5" /><small>Hours worked before overtime.</small></label>
-          <label>Working days each week<input id="daysPerWeek" type="number" min="1" max="7" step="1" value="5" /><small>Used for the per-working-day result.</small></label>
-          <label>Paid or contract weeks each year<input id="paidWeeks" type="number" min="1" max="52" step="1" value="52" /><small>The number of weeks your normal pay covers, including paid leave.</small></label>
-        </div>
-        <div class="action-row"><span></span><button class="button primary next-tab" data-next="overtime" type="button">Continue to overtime</button></div>
-      </section>
-
-      <section class="tab-panel" data-panel="overtime">
-        <div class="panel-heading"><div><p class="kicker">Extra pay and leave</p><h1>Overtime and time off</h1><p>Overtime is added to total taxable employment income. It does not have its own special tax rate.</p></div><div class="status-chip optional">Optional</div></div>
-        <div class="form-grid">
-          <label>Overtime hours per overtime week<input id="overtimeHours" type="number" min="0" max="80" step="0.5" value="0" /><small>Extra hours worked in a typical overtime week.</small></label>
-          <label>Overtime hourly rate (£)<input id="overtimeRate" type="number" min="0" step="0.01" value="0" /><small>Use the actual enhanced or normal overtime rate.</small></label>
-          <label>Overtime weeks each year<input id="overtimeWeeks" type="number" min="0" max="52" step="1" value="0" /><small>How many weeks you realistically expect to work overtime.</small></label>
-          <label>Leave weeks each year<input id="leaveWeeks" type="number" min="0" max="52" step="0.1" value="5.6" /><small>Includes holiday or other planned leave.</small></label>
-          <label>Is the leave paid?<select id="leavePaid"><option value="yes">Yes — paid leave</option><option value="no">No — unpaid leave</option></select><small>Paid leave keeps normal pay but reduces actual worked hours.</small></label>
-        </div>
-        <div class="formula-note"><strong>Overtime estimate method</strong><span>The app compares tax and NI with overtime against tax and NI without overtime. The difference is treated as the deductions caused by overtime.</span></div>
-        <div class="action-row"><button class="button ghost prev-tab" data-prev="pay" type="button">Back</button><button class="button primary next-tab" data-next="spending" type="button">Continue to spending</button></div>
-      </section>
-
-      <section class="tab-panel" data-panel="spending">
-        <div class="panel-heading"><div><p class="kicker">Cash flow</p><h1>Monthly spending</h1><p>Add the regular costs that leave your account each month. Entering £0 is fine.</p></div><div class="live-amount">Total <strong id="expensePreview">£0</strong></div></div>
-        <div class="expense-groups">
-          <fieldset><legend>Home and essential bills</legend><div class="form-grid"><label>Rent or mortgage<input id="expHousing" type="number" min="0" value="0" /></label><label>Council Tax<input id="expCouncilTax" type="number" min="0" value="0" /></label><label>Gas, electricity, water, internet and insurance<input id="expUtilities" type="number" min="0" value="0" /></label></div></fieldset>
-          <fieldset><legend>Everyday living</legend><div class="form-grid"><label>Food and household<input id="expFood" type="number" min="0" value="0" /></label><label>Travel and transport<input id="expTransport" type="number" min="0" value="0" /></label><label>Phone, childcare, medical or care costs<input id="expLiving" type="number" min="0" value="0" /></label></div></fieldset>
-          <fieldset><legend>Debt and finance</legend><div class="form-grid"><label>Credit cards and personal loans<input id="expDebt" type="number" min="0" value="0" /></label><label>Car finance and other fixed finance<input id="expFinance" type="number" min="0" value="0" /></label></div></fieldset>
-          <fieldset><legend>Flexible spending</legend><div class="form-grid"><label>Subscriptions and entertainment<input id="expSubscriptions" type="number" min="0" value="0" /></label><label>Eating out, holidays and shopping<input id="expOptional" type="number" min="0" value="0" /></label><label>Other monthly spending<input id="expOther" type="number" min="0" value="0" /></label></div></fieldset>
-        </div>
-        <div class="clarification"><strong>Important:</strong> “Take-home pay” means income after Income Tax and employee NI. “Money remaining after expenses” is take-home pay minus the costs entered here.</div>
-        <div class="action-row"><button class="button ghost prev-tab" data-prev="overtime" type="button">Back</button><button class="button primary next-tab" data-next="pension" type="button">Continue to pension</button></div>
-      </section>
-
-      <section class="tab-panel" data-panel="pension">
-        <div class="panel-heading"><div><p class="kicker">Retirement estimate</p><h1>Pension assumptions</h1><p>This is suitable for contribution-based pensions. Defined-benefit schemes need specialist scheme information.</p></div><div class="status-chip optional">Estimate</div></div>
-        <div class="form-grid">
-          <label>Pension scheme type<select id="pensionSchemeType"><option value="definedContribution">Defined contribution / pension pot</option><option value="definedBenefit">Defined benefit / final salary style</option></select><small>Defined-benefit pensions cannot be valued accurately with this model.</small></label>
-          <label>Contribution basis<select id="pensionBasis"><option value="full">Full gross employment pay</option><option value="pensionable">Pensionable pay entered below</option><option value="qualifying">2026/27 qualifying earnings (£6,240–£50,270)</option></select><small>The percentage is applied to this amount.</small></label>
-          <label>Annual pensionable pay (£)<input id="pensionablePay" type="number" min="0" value="30000" /><small>Used only when “pensionable pay” is selected.</small></label>
-          <label>Contribution method<select id="pensionMethod"><option value="simple">Simple contribution estimate</option><option value="netPay">Net pay arrangement</option><option value="reliefAtSource">Relief at source</option><option value="salarySacrifice">Salary sacrifice</option></select><small>Contributions are shown separately and are not deducted from take-home in this version.</small></label>
-          <label>Your contribution (%)<input id="employeePensionPct" type="number" min="0" max="100" step="0.1" value="5" /><small>Your percentage of the selected pension contribution basis.</small></label>
-          <label>Employer contribution (%)<input id="employerPensionPct" type="number" min="0" max="100" step="0.1" value="3" /><small>Additional money paid by your employer into the scheme.</small></label>
-          <label>Current pension balance (£)<input id="currentPension" type="number" min="0" step="100" value="0" /></label>
-          <label>Current age<input id="currentAge" type="number" min="16" max="89" step="1" value="30" /></label>
-          <label>Intended retirement age<input id="retirementAge" type="number" min="17" max="90" step="1" value="68" /></label>
-          <label>Estimated yearly investment growth (%)<input id="pensionGrowthPct" type="number" min="0" max="20" step="0.1" value="5" /><small>Illustration only. Investment returns can be lower or negative.</small><span class="preset-row"><button type="button" class="preset" data-value="3">3% cautious</button><button type="button" class="preset" data-value="5">5% middle</button><button type="button" class="preset" data-value="7">7% higher</button></span></label>
-          <label>Annual pension fees (%)<input id="pensionFeePct" type="number" min="0" max="5" step="0.1" value="0.5" /></label>
-          <label>Desired yearly retirement income (£)<input id="desiredRetirementIncome" type="number" min="0" step="500" value="30000" /></label>
-          <label>Expected annual State Pension (£)<input id="statePensionAnnual" type="number" min="0" step="100" value="0" /><small>Use your own forecast where possible.</small><button id="useFullStatePension" class="inline-link" type="button">Use 2026/27 full new State Pension (£12,548)</button></label>
-          <label>Illustrative private-pension income rate (%)<input id="drawdownPct" type="number" min="0" max="10" step="0.1" value="4" /><small>Used only to translate the projected pot into a yearly income illustration.</small></label>
-        </div>
-        <div id="pensionWarning" class="warning hidden"></div>
-        <div class="action-row"><button class="button ghost prev-tab" data-prev="spending" type="button">Back</button><button id="calculateButton" class="button primary" type="button">Update all calculations</button></div>
-      </section>
-
-      <section class="tab-panel" data-panel="results">
-        <div class="panel-heading"><div><p class="kicker">Verified calculation output</p><h1>Your pay results</h1><p id="resultStatus">Press “Update all calculations” after entering your figures.</p></div><button class="button secondary recalculate" type="button">Update calculation</button></div>
-        <div class="period-tabs" role="tablist"><button class="period active" data-period="hour">Per hour</button><button class="period" data-period="day">Per working day</button><button class="period" data-period="week">Per paid week</button><button class="period" data-period="month">Per month</button><button class="period" data-period="year">Per year</button><button class="period" data-period="five">Five-year total</button></div>
-        <div class="headline-strip"><div><span id="periodLabel">Take-home per worked hour</span><strong id="periodNet">—</strong><small id="periodRemaining">Money remaining after expenses: —</small></div><div class="market-change"><span>Effective deduction rate</span><strong id="effectiveDeduction">—</strong></div></div>
-        <div class="metric-table"><div><span>Gross income</span><strong id="metricGross">—</strong></div><div><span>Income Tax</span><strong id="metricTax">—</strong></div><div><span>Employee NI</span><strong id="metricNi">—</strong></div><div><span>Take-home pay</span><strong id="metricNet">—</strong></div><div><span>Entered expenses</span><strong id="metricExpenses">—</strong></div><div><span>Money remaining</span><strong id="metricRemaining">—</strong></div></div>
-        <div class="estimate-tabs"><button class="estimate-tab active" data-estimate="standard">Standard pay</button><button class="estimate-tab" data-estimate="overtimeEstimate">Overtime estimate</button><button class="estimate-tab" data-estimate="leaveImpact">Leave impact</button><button class="estimate-tab" data-estimate="taxNi">Tax & NI</button><button class="estimate-tab" data-estimate="expenseResult">Expenses</button><button class="estimate-tab" data-estimate="pensionResult">Pension estimate</button><button class="estimate-tab" data-estimate="fiveProjection">Five-year projection</button></div>
-        <div id="estimateContent" class="estimate-content"><p>Calculation details will appear here.</p></div>
-        <div id="calculationExplanation" class="audit-explanation"></div>
-      </section>
-
-      <section class="tab-panel" data-panel="projections">
-        <div class="panel-heading"><div><p class="kicker">Forward view</p><h1>Income and pension projections</h1><p>Each year is calculated separately. Tax and NI thresholds are held at 2026/27 levels so the projection is an illustration, not a forecast.</p></div><button class="button secondary recalculate" type="button">Update</button></div>
-        <div class="form-grid compact-grid">
-          <label>Expected wage increase each year (%)<input id="wageGrowthPct" type="number" min="0" max="25" step="0.1" value="2" /></label>
-          <label>Expected expense increase each year (%)<input id="expenseGrowthPct" type="number" min="0" max="25" step="0.1" value="2" /></label>
-          <label>Expected overtime change each year (%)<input id="overtimeGrowthPct" type="number" min="0" max="25" step="0.1" value="0" /></label>
-          <label>Inflation assumption (%)<input id="inflationPct" type="number" min="0" max="20" step="0.1" value="2" /></label>
-          <label>Projection years<input id="projectionYears" type="number" min="1" max="60" step="1" value="10" /></label>
-        </div>
-        <div class="chart-controls"><div class="segmented"><button class="chart-range active" data-years="1">1Y</button><button class="chart-range" data-years="5">5Y</button><button class="chart-range" data-years="10">10Y</button><button class="chart-range" data-years="retirement">To retirement</button></div><div class="segmented"><button class="chart-mode active" data-mode="yearly">Yearly</button><button class="chart-mode" data-mode="cumulative">Cumulative</button></div><div class="segmented"><button class="chart-money active" data-money="nominal">Current values</button><button class="chart-money" data-money="real">Inflation-adjusted</button></div></div>
-        <div class="chart-grid"><article class="market-chart"><header><div><span>Income outlook</span><strong id="incomeChartHeadline">—</strong></div><small>Gross, take-home and money remaining</small></header><div id="incomeChart" class="line-chart"></div></article><article class="market-chart"><header><div><span>Pension outlook</span><strong id="pensionChartHeadline">—</strong></div><small>Pot, employee deposits and employer deposits</small></header><div id="pensionChart" class="line-chart"></div></article></div>
-        <div class="pension-health"><div id="pensionHealthIndicator" class="health-indicator neutral"><span class="health-icon">●</span><div><strong id="pensionHealthLabel">Set a retirement target</strong><small id="pensionHealthDetail">Calculate to assess the target.</small></div></div><div class="health-stats"><div><span>Projected pot</span><strong id="healthPot">—</strong></div><div><span>Private income estimate</span><strong id="healthPrivateIncome">—</strong></div><div><span>State Pension entered</span><strong id="healthStateIncome">—</strong></div><div><span>Combined annual income</span><strong id="healthCombined">—</strong></div><div><span>Target gap / surplus</span><strong id="healthGap">—</strong></div></div></div>
-      </section>
-
-      <section class="tab-panel" data-panel="car">
-        <div class="panel-heading"><div><p class="kicker">Affordability estimate</p><h1>Car and car-finance costs</h1><p>See the full monthly cost, not only the finance payment. This section treats these costs as additional to spending entered earlier.</p></div><div class="status-chip optional">Illustrative</div></div>
-        <div class="form-grid">
-          <label>Purchase method<select id="carPurchaseType"><option value="finance">Finance</option><option value="cash">Cash purchase</option></select></label>
-          <label>Vehicle price (£)<input id="vehiclePrice" type="number" min="0" value="20000" /></label>
-          <label>Deposit (£)<input id="carDeposit" type="number" min="0" value="2000" /></label>
-          <label>Finance APR (%)<input id="carApr" type="number" min="0" max="50" step="0.1" value="7.9" /><small>APR is the annual cost of borrowing used for this illustration.</small></label>
-          <label>Finance term (months)<input id="carTerm" type="number" min="1" max="120" value="48" /></label>
-          <label>Final or balloon payment (£)<input id="carBalloon" type="number" min="0" value="0" /><small>A larger final payment due at the end of some agreements.</small></label>
-          <label>Cash ownership period (months)<input id="carOwnershipMonths" type="number" min="1" max="180" value="60" /><small>Used to show a monthly equivalent for a cash purchase.</small></label>
-          <label>Insurance per month (£)<input id="carInsurance" type="number" min="0" value="80" /></label>
-          <label>Fuel or charging per month (£)<input id="carFuel" type="number" min="0" value="150" /></label>
-          <label>Vehicle tax per month (£)<input id="carTax" type="number" min="0" value="20" /></label>
-          <label>Maintenance per month (£)<input id="carMaintenance" type="number" min="0" value="50" /></label>
-          <label>Parking per month (£)<input id="carParking" type="number" min="0" value="0" /></label>
-          <label>Other car costs per month (£)<input id="carOther" type="number" min="0" value="0" /></label>
-        </div>
-        <button id="carCalculate" class="button primary" type="button">Estimate car affordability</button>
-        <div id="carResults" class="result-dashboard muted"><p>Calculate your pay first, then run the car estimate.</p></div>
-      </section>
-
-      <section class="tab-panel" data-panel="mortgage">
-        <div class="panel-heading"><div><p class="kicker">Illustrative lending position</p><h1>Mortgage estimate</h1><p>Compare a possible mortgage with income and commitments. This is not a lender decision or approval.</p></div><div class="status-chip optional">Estimate only</div></div>
-        <div class="form-grid">
-          <label>Applicant gross income (£)<input id="mortgageIncome1" type="number" min="0" value="30000" /><small>Updated from the wage calculation when you calculate.</small></label>
-          <label>Second applicant gross income (£)<input id="mortgageIncome2" type="number" min="0" value="0" /></label>
-          <label>Property price (£)<input id="propertyPrice" type="number" min="0" value="250000" /></label>
-          <label>Deposit amount (£)<input id="mortgageDeposit" type="number" min="0" value="25000" /></label>
-          <label>Preferred term (years)<input id="mortgageTerm" type="number" min="1" max="50" value="30" /></label>
-          <label>Illustrative interest rate (%)<input id="mortgageRate" type="number" min="0" max="20" step="0.1" value="5" /></label>
-          <label>Minimum income multiple<input id="mortgageMinMultiple" type="number" min="1" max="10" step="0.1" value="4" /><small>An illustration, not a legal lending limit.</small></label>
-          <label>Maximum income multiple<input id="mortgageMaxMultiple" type="number" min="1" max="10" step="0.1" value="4.5" /></label>
-          <label>Existing debt payments per month (£)<input id="mortgageDebt" type="number" min="0" value="0" /></label>
-          <label>Car finance per month (£)<input id="mortgageCarFinance" type="number" min="0" value="0" /></label>
-          <label>Credit-card or loan payments per month (£)<input id="mortgageCredit" type="number" min="0" value="0" /></label>
-          <label>Childcare per month (£)<input id="mortgageChildcare" type="number" min="0" value="0" /></label>
-          <label>Other major commitments per month (£)<input id="mortgageOther" type="number" min="0" value="0" /></label>
-          <label class="check-label"><input id="mortgageUseSpending" type="checkbox" checked /> Include non-housing spending entered earlier</label>
-        </div>
-        <button id="mortgageCalculate" class="button primary" type="button">Estimate mortgage position</button>
-        <div id="mortgageResults" class="result-dashboard muted"><p>Calculate your pay first, then run the mortgage estimate.</p></div>
-      </section>
-
-      <section class="tab-panel" data-panel="budget">
-        <div class="panel-heading"><div><p class="kicker">Personal cash-flow view</p><h1>Budget guidance</h1><p>These ideas use only the figures entered in this browser session and are not personal financial advice.</p></div><button class="button secondary recalculate" type="button">Update</button></div>
-        <div id="budgetDashboard" class="budget-grid"><article><span>Monthly take-home</span><strong>—</strong></article></div>
-        <div class="budget-columns"><article><h2>Practical next steps</h2><ul id="budgetTips"><li>Calculate your figures to receive tailored observations.</li></ul></article><article><h2>Five-year summary</h2><div id="fiveYearSummary" class="summary-list"></div></article></div>
-      </section>
-
-      <section class="tab-panel" data-panel="resources">
-        <div class="panel-heading"><div><p class="kicker">Independent support</p><h1>Helpful ways to improve your finances</h1><p>These links are not sponsored. Future commercial placements will always be clearly labelled.</p></div></div>
-        <div class="resource-grid"><a href="https://findajob.dwp.gov.uk/" target="_blank" rel="noopener noreferrer"><strong>Find a job</strong><span>Official UK job search</span></a><a href="https://nationalcareers.service.gov.uk/" target="_blank" rel="noopener noreferrer"><strong>National Careers Service</strong><span>Roles, skills and salary information</span></a><a href="https://www.skillsforcareers.education.gov.uk/" target="_blank" rel="noopener noreferrer"><strong>Skills for Careers</strong><span>Training and qualifications</span></a><a href="https://www.gov.uk/apply-apprenticeship" target="_blank" rel="noopener noreferrer"><strong>Apprenticeships</strong><span>Earn while training</span></a><a href="https://www.gov.uk/set-up-business" target="_blank" rel="noopener noreferrer"><strong>Start a business</strong><span>Official setup guidance</span></a><a href="https://www.gov.uk/benefits-calculators" target="_blank" rel="noopener noreferrer"><strong>Benefits calculators</strong><span>Check possible support</span></a><a href="https://www.moneyhelper.org.uk/en/pensions-and-retirement" target="_blank" rel="noopener noreferrer"><strong>Pension guidance</strong><span>Free MoneyHelper information</span></a><a href="https://www.moneyhelper.org.uk/en/money-troubles/dealing-with-debt" target="_blank" rel="noopener noreferrer"><strong>Debt support</strong><span>Free and confidential help</span></a></div>
-        <div class="ad-grid"><div><span>Advertisement</span><strong>Future Google Ads placement</strong><small>No advert or tracking code is active.</small></div><div><span>Sponsored</span><strong>Future partner offer</strong><small>Commercial content will never alter calculator results.</small></div><div><span>Sponsored</span><strong>Future financial tool</strong><small>Reserved for a clearly labelled placement.</small></div></div>
-      </section>
+  <main class="page-shell">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Your money, made easier</p>
+        <h1>Understand what you earn, spend and could build.</h1>
+        <p>Move through the simple tabs, enter only what applies to you, then update the calculation. Advanced assumptions stay hidden until you need them.</p>
+      </div>
+      <div class="hero-summary">
+        <span>Private by design</span>
+        <strong>No account or stored data</strong>
+        <small>Refreshing the page clears your figures.</small>
+      </div>
     </section>
+
+    <section class="app-card" aria-label="Wage Wise calculator">
+      <nav class="tab-nav" aria-label="Calculator sections">
+        <button class="nav-tab active" data-tab="pay" type="button"><span>1</span><strong>Your pay</strong><small>Normal wage</small></button>
+        <button class="nav-tab" data-tab="overtime" type="button"><span>2</span><strong>Overtime</strong><small>Extra work & leave</small></button>
+        <button class="nav-tab" data-tab="spending" type="button"><span>3</span><strong>Spending</strong><small>Monthly costs</small></button>
+        <button class="nav-tab" data-tab="pension" type="button"><span>4</span><strong>Pension</strong><small>Retirement estimate</small></button>
+        <button class="nav-tab" data-tab="results" type="button"><span>5</span><strong>Results</strong><small>Your pay breakdown</small></button>
+        <button class="nav-tab" data-tab="projections" type="button"><span>6</span><strong>Projections</strong><small>Income & pension</small></button>
+        <button class="nav-tab" data-tab="car" type="button"><span>7</span><strong>Car</strong><small>Full monthly cost</small></button>
+        <button class="nav-tab" data-tab="mortgage" type="button"><span>8</span><strong>Mortgage</strong><small>Illustrative range</small></button>
+        <button class="nav-tab" data-tab="budget" type="button"><span>9</span><strong>Budget</strong><small>Money left</small></button>
+        <button class="nav-tab" data-tab="resources" type="button"><span>10</span><strong>Resources</strong><small>Useful UK links</small></button>
+      </nav>
+
+      <div class="workspace">
+        <div id="messageArea" class="message-area" aria-live="polite"></div>
+
+        <section class="tab-panel active" data-panel="pay">
+          <div class="panel-heading">
+            <div><p class="eyebrow">Step 1</p><h2>Your normal pay</h2><p>Start with the amount shown on your contract or payslip.</p></div>
+            <span class="section-badge">Main details</span>
+          </div>
+          <div class="input-card primary-inputs">
+            <div class="form-grid">
+              <label>How is your pay quoted?
+                <select id="payType">
+                  <option value="annual">Annual salary</option>
+                  <option value="monthly">Monthly salary</option>
+                  <option value="weekly">Weekly wage</option>
+                  <option value="hourly">Hourly wage</option>
+                </select>
+                <small>Choose the format you normally use when describing your pay.</small>
+              </label>
+              <label id="payAmountLabel">Annual salary (£)
+                <input id="payAmount" type="number" min="0" step="100" value="30000" inputmode="decimal" />
+                <small id="payAmountHelp">Your yearly contractual salary before deductions.</small>
+              </label>
+              <label>Standard hours each week
+                <input id="hoursPerWeek" type="number" min="0.1" max="100" step="0.5" value="37.5" inputmode="decimal" />
+                <small>Your usual hours before overtime.</small>
+              </label>
+              <label>Working days each week
+                <input id="daysPerWeek" type="number" min="1" max="7" step="1" value="5" inputmode="numeric" />
+                <small>Used to calculate pay per actual working day.</small>
+              </label>
+              <label>Paid or contract weeks each year
+                <input id="paidWeeks" type="number" min="1" max="52" step="1" value="52" inputmode="numeric" />
+                <small>Usually 52 for a continuing salary. It includes paid holiday.</small>
+              </label>
+            </div>
+          </div>
+          <details class="advanced-details">
+            <summary>Advanced pay setting</summary>
+            <div class="details-body">
+              <label>How often are you paid?
+                <select id="payFrequency"><option value="monthly">Monthly payroll</option><option value="weekly">Weekly payroll</option></select>
+                <small>This changes how employee National Insurance is estimated.</small>
+              </label>
+            </div>
+          </details>
+          <div class="action-row"><span></span><button class="button primary next-tab" data-next="overtime" type="button">Next: overtime and leave</button></div>
+        </section>
+
+        <section class="tab-panel" data-panel="overtime">
+          <div class="panel-heading">
+            <div><p class="eyebrow">Step 2</p><h2>Overtime and leave</h2><p>Leave overtime at zero when it does not apply. The calculator never assumes you work it every week.</p></div>
+            <span class="section-badge optional">Optional</span>
+          </div>
+          <div class="two-card-grid">
+            <article class="input-card">
+              <div class="card-title"><span class="card-icon">＋</span><div><h3>Overtime estimate</h3><p>Tell us what a normal overtime week looks like.</p></div></div>
+              <div class="form-grid single-column">
+                <label>Extra hours in an overtime week<input id="overtimeHours" type="number" min="0" max="80" step="0.5" value="0" /><small>Only the extra hours, not your normal contracted hours.</small></label>
+                <label>Overtime hourly rate (£)<input id="overtimeRate" type="number" min="0" step="0.01" value="0" /><small>Enter the actual enhanced or normal rate paid for overtime.</small></label>
+                <label>How many weeks per year include overtime?<input id="overtimeWeeks" type="number" min="0" max="52" step="1" value="0" /><small>Use a realistic estimate rather than automatically entering 52.</small></label>
+              </div>
+            </article>
+            <article class="input-card">
+              <div class="card-title"><span class="card-icon">☀</span><div><h3>Leave</h3><p>Separate paid holiday from unpaid time away.</p></div></div>
+              <div class="form-grid single-column">
+                <label>Leave weeks each year<input id="leaveWeeks" type="number" min="0" max="52" step="0.1" value="5.6" /><small>Holiday or other planned leave measured in weeks.</small></label>
+                <label>Is this leave paid?<select id="leavePaid"><option value="yes">Yes — normal pay continues</option><option value="no">No — pay is reduced</option></select><small>Paid leave keeps normal salary while reducing hours actually worked.</small></label>
+              </div>
+            </article>
+          </div>
+          <div class="formula-note"><strong>How overtime tax is estimated</strong><span>The app compares tax and NI with overtime against the same calculation without overtime. The difference is treated as the deductions caused by the extra work.</span></div>
+          <div class="action-row"><button class="button ghost prev-tab" data-prev="pay" type="button">Back</button><button class="button primary next-tab" data-next="spending" type="button">Next: monthly spending</button></div>
+        </section>
+
+        <section class="tab-panel" data-panel="spending">
+          <div class="panel-heading">
+            <div><p class="eyebrow">Step 3</p><h2>Your monthly spending</h2><p>Add regular costs to see what is genuinely left. The examples beneath each group show what belongs there.</p></div>
+            <div class="live-amount">Monthly total <strong id="expensePreview">£0</strong></div>
+          </div>
+          <div class="expense-grid">
+            <article class="expense-card"><div class="card-title"><span class="card-icon">⌂</span><div><h3>Home and bills</h3><p>Housing, Council Tax and household services.</p></div></div><div class="form-grid single-column"><label>Rent or mortgage<input id="expHousing" type="number" min="0" value="0" /></label><label>Council Tax<input id="expCouncilTax" type="number" min="0" value="0" /></label><label>Energy, water, internet and home insurance<input id="expUtilities" type="number" min="0" value="0" /></label></div></article>
+            <article class="expense-card"><div class="card-title"><span class="card-icon">●</span><div><h3>Everyday living</h3><p>Food, travel, phone, childcare and care costs.</p></div></div><div class="form-grid single-column"><label>Food and household<input id="expFood" type="number" min="0" value="0" /></label><label>Travel and transport<input id="expTransport" type="number" min="0" value="0" /></label><label>Phone, childcare, medical or care costs<input id="expLiving" type="number" min="0" value="0" /></label></div></article>
+            <article class="expense-card"><div class="card-title"><span class="card-icon">£</span><div><h3>Debt and finance</h3><p>Committed repayments that normally leave each month.</p></div></div><div class="form-grid single-column"><label>Credit cards and personal loans<input id="expDebt" type="number" min="0" value="0" /></label><label>Car finance and other fixed finance<input id="expFinance" type="number" min="0" value="0" /></label></div></article>
+            <article class="expense-card"><div class="card-title"><span class="card-icon">◇</span><div><h3>Flexible spending</h3><p>Entertainment, eating out, shopping and subscriptions.</p></div></div><div class="form-grid single-column"><label>Subscriptions and entertainment<input id="expSubscriptions" type="number" min="0" value="0" /></label><label>Eating out, holidays and shopping<input id="expOptional" type="number" min="0" value="0" /></label><label>Other monthly spending<input id="expOther" type="number" min="0" value="0" /></label></div></article>
+          </div>
+          <div class="clarification"><strong>Take-home pay</strong> is income after Income Tax and employee NI. <strong>Money remaining</strong> is take-home pay minus the expenses entered here.</div>
+          <div class="action-row"><button class="button ghost prev-tab" data-prev="overtime" type="button">Back</button><button class="button primary next-tab" data-next="pension" type="button">Next: pension estimate</button></div>
+        </section>
+
+        <section class="tab-panel" data-panel="pension">
+          <div class="panel-heading">
+            <div><p class="eyebrow">Step 4</p><h2>Your pension estimate</h2><p>Start with six simple figures. Open advanced settings only when your scheme needs them.</p></div>
+            <span class="section-badge optional">Estimate</span>
+          </div>
+          <div class="input-card">
+            <div class="form-grid">
+              <label>Your pension contribution (%)<input id="employeePensionPct" type="number" min="0" max="100" step="0.1" value="5" /><small>The percentage paid by you.</small></label>
+              <label>Employer contribution (%)<input id="employerPensionPct" type="number" min="0" max="100" step="0.1" value="3" /><small>Extra money paid by your employer.</small></label>
+              <label>Current pension balance (£)<input id="currentPension" type="number" min="0" step="100" value="0" /><small>Your current pension-pot value, if known.</small></label>
+              <label>Current age<input id="currentAge" type="number" min="16" max="89" step="1" value="30" /></label>
+              <label>Planned retirement age<input id="retirementAge" type="number" min="17" max="90" step="1" value="68" /></label>
+              <label>Desired retirement income each year (£)<input id="desiredRetirementIncome" type="number" min="0" step="500" value="30000" /><small>Your personal target before comparing the result.</small></label>
+            </div>
+          </div>
+          <details class="advanced-details">
+            <summary>Advanced pension assumptions</summary>
+            <div class="details-body form-grid">
+              <label>Pension scheme type<select id="pensionSchemeType"><option value="definedContribution">Defined contribution / pension pot</option><option value="definedBenefit">Defined benefit / final salary style</option></select><small>Defined-benefit schemes cannot be valued accurately with this pot model.</small></label>
+              <label>Contribution basis<select id="pensionBasis"><option value="full">Full gross employment pay</option><option value="pensionable">Pensionable pay entered below</option><option value="qualifying">2026/27 qualifying earnings (£6,240–£50,270)</option></select><small>The contribution percentage is applied to this amount.</small></label>
+              <label>Annual pensionable pay (£)<input id="pensionablePay" type="number" min="0" value="30000" /></label>
+              <label>Contribution method<select id="pensionMethod"><option value="simple">Simple contribution estimate</option><option value="netPay">Net pay arrangement</option><option value="reliefAtSource">Relief at source</option><option value="salarySacrifice">Salary sacrifice</option></select><small>Contributions remain separate from take-home in this version.</small></label>
+              <label>Estimated yearly growth (%)<input id="pensionGrowthPct" type="number" min="0" max="20" step="0.1" value="5" /><small>Illustration only; returns can be lower or negative.</small><span class="preset-row"><button type="button" class="preset" data-value="3">3% cautious</button><button type="button" class="preset" data-value="5">5% middle</button><button type="button" class="preset" data-value="7">7% higher</button></span></label>
+              <label>Annual pension fees (%)<input id="pensionFeePct" type="number" min="0" max="5" step="0.1" value="0.5" /></label>
+              <label>Expected annual State Pension (£)<input id="statePensionAnnual" type="number" min="0" step="100" value="0" /><small>Use your own forecast where possible.</small><button id="useFullStatePension" class="inline-link" type="button">Use 2026/27 full new State Pension (£12,548)</button></label>
+              <label>Illustrative private-pension income rate (%)<input id="drawdownPct" type="number" min="0" max="10" step="0.1" value="4" /><small>Only used to illustrate yearly income from the projected pot.</small></label>
+            </div>
+          </details>
+          <div id="pensionWarning" class="warning hidden"></div>
+          <div class="calculate-box"><div><strong>Ready for your results?</strong><span>Nothing is uploaded or saved.</span></div><button id="calculateButton" class="button primary" type="button">Update all calculations</button></div>
+          <div class="action-row"><button class="button ghost prev-tab" data-prev="spending" type="button">Back</button><button class="button ghost next-tab" data-next="results" type="button">View results</button></div>
+        </section>
+
+        <section class="tab-panel" data-panel="results">
+          <div class="panel-heading">
+            <div><p class="eyebrow">Your calculation</p><h2>Pay and money breakdown</h2><p id="resultStatus">Enter your figures and press “Update all calculations”.</p></div>
+            <button class="button secondary recalculate" type="button">Update calculation</button>
+          </div>
+          <div class="period-tabs" role="tablist">
+            <button class="period active" data-period="hour" type="button">Hour</button><button class="period" data-period="day" type="button">Day</button><button class="period" data-period="week" type="button">Week</button><button class="period" data-period="month" type="button">Month</button><button class="period" data-period="year" type="button">Year</button><button class="period" data-period="five" type="button">5 years</button>
+          </div>
+          <div class="headline-result">
+            <div><span id="periodLabel">Take-home per worked hour</span><strong id="periodNet">—</strong><small id="periodRemaining">Money remaining after expenses: —</small></div>
+            <div class="headline-side"><span>Tax and NI share</span><strong id="effectiveDeduction">—</strong><small>of gross income</small></div>
+          </div>
+          <div class="metric-grid">
+            <article><span>Gross income</span><strong id="metricGross">—</strong></article>
+            <article><span>Income Tax</span><strong id="metricTax">—</strong></article>
+            <article><span>Employee NI</span><strong id="metricNi">—</strong></article>
+            <article><span>Take-home pay</span><strong id="metricNet">—</strong></article>
+            <article><span>Entered expenses</span><strong id="metricExpenses">—</strong></article>
+            <article class="positive-metric"><span>Money remaining</span><strong id="metricRemaining">—</strong></article>
+          </div>
+
+          <div class="visual-heading"><div><p class="eyebrow">Visual overview</p><h3>See where the money goes</h3></div><small>Charts use the latest updated calculation.</small></div>
+          <div class="donut-grid">
+            <article class="chart-card">
+              <header><div><span>Yearly money split</span><strong>Gross pay allocation</strong></div></header>
+              <div class="donut-layout"><div id="moneyDonut" class="donut"><div><strong id="moneyDonutCentre">—</strong><span>left after costs</span></div></div><div id="moneyLegend" class="donut-legend"></div></div>
+              <p class="chart-note">Expenses are shown after tax and NI. Any overspend above take-home is listed separately.</p>
+            </article>
+            <article class="chart-card">
+              <header><div><span>Monthly spending</span><strong>Costs by category</strong></div></header>
+              <div class="donut-layout"><div id="spendingDonut" class="donut"><div><strong id="spendingDonutCentre">—</strong><span>monthly costs</span></div></div><div id="spendingLegend" class="donut-legend"></div></div>
+              <p class="chart-note">Add spending in Step 3 to personalise this chart.</p>
+            </article>
+            <article class="chart-card">
+              <header><div><span>Pension at retirement</span><strong>What builds the projected pot</strong></div></header>
+              <div class="donut-layout"><div id="pensionDonut" class="donut"><div><strong id="pensionDonutCentre">—</strong><span>projected pot</span></div></div><div id="pensionLegend" class="donut-legend"></div></div>
+              <p class="chart-note">Growth is an estimate after modelled fees and is not guaranteed.</p>
+            </article>
+          </div>
+
+          <div class="estimate-tabs">
+            <button class="estimate-tab active" data-estimate="standard" type="button">Standard pay</button>
+            <button class="estimate-tab" data-estimate="overtimeEstimate" type="button">Overtime</button>
+            <button class="estimate-tab" data-estimate="leaveImpact" type="button">Leave</button>
+            <button class="estimate-tab" data-estimate="taxNi" type="button">Tax & NI</button>
+            <button class="estimate-tab" data-estimate="expenseResult" type="button">Expenses</button>
+            <button class="estimate-tab" data-estimate="pensionResult" type="button">Pension</button>
+            <button class="estimate-tab" data-estimate="fiveProjection" type="button">5-year view</button>
+          </div>
+          <div id="estimateContent" class="estimate-content"><p>Calculation details will appear here.</p></div>
+          <div id="calculationExplanation" class="audit-explanation"></div>
+          <div class="action-row"><button class="button ghost prev-tab" data-prev="pension" type="button">Edit pension</button><button class="button primary next-tab" data-next="projections" type="button">View future projections</button></div>
+        </section>
+
+        <section class="tab-panel" data-panel="projections">
+          <div class="panel-heading">
+            <div><p class="eyebrow">Future view</p><h2>Income and pension projections</h2><p>Stock-market-style charts show the direction of your estimates without pretending wages or pensions are tradable assets.</p></div>
+            <button class="button secondary recalculate" type="button">Update charts</button>
+          </div>
+          <div class="projection-assumptions">
+            <div class="form-grid three-column">
+              <label>Expected yearly wage increase (%)<input id="wageGrowthPct" type="number" min="0" max="25" step="0.1" value="2" /><small>Applied to normal pay each projected year.</small></label>
+              <label>Expected yearly expense increase (%)<input id="expenseGrowthPct" type="number" min="0" max="25" step="0.1" value="2" /><small>Models bills rising over time.</small></label>
+              <label>Projection length (years)<input id="projectionYears" type="number" min="1" max="60" step="1" value="10" /></label>
+            </div>
+            <details class="advanced-details compact-details"><summary>Advanced projection assumptions</summary><div class="details-body form-grid"><label>Expected overtime change each year (%)<input id="overtimeGrowthPct" type="number" min="0" max="25" step="0.1" value="0" /></label><label>Inflation assumption (%)<input id="inflationPct" type="number" min="0" max="20" step="0.1" value="2" /></label></div></details>
+          </div>
+          <div class="chart-controls">
+            <div class="control-group"><span>Time</span><div class="segmented"><button class="chart-range" data-years="1" type="button">1Y</button><button class="chart-range active" data-years="5" type="button">5Y</button><button class="chart-range" data-years="10" type="button">10Y</button><button class="chart-range" data-years="retirement" type="button">Retirement</button></div></div>
+            <div class="control-group"><span>View</span><div class="segmented"><button class="chart-mode active" data-mode="yearly" type="button">Yearly</button><button class="chart-mode" data-mode="cumulative" type="button">Cumulative</button></div></div>
+            <div class="control-group"><span>Money</span><div class="segmented"><button class="chart-money active" data-money="nominal" type="button">Future £</button><button class="chart-money" data-money="real" type="button">Today’s £</button></div></div>
+          </div>
+          <div class="market-summary" id="projectionSnapshot">
+            <article><span>Year 1 take-home</span><strong id="projectionStartNet">—</strong><small>starting estimate</small></article>
+            <article><span>End take-home</span><strong id="projectionEndNet">—</strong><small id="projectionIncomeChange">—</small></article>
+            <article><span>End pension balance</span><strong id="projectionEndPension">—</strong><small id="projectionPensionChange">—</small></article>
+            <article><span>End money remaining</span><strong id="projectionEndRemaining">—</strong><small>after projected expenses</small></article>
+          </div>
+          <div class="projection-chart-grid">
+            <article class="market-chart">
+              <header><div><span>Income outlook</span><strong id="incomeChartHeadline">—</strong></div><small>Gross, take-home and money remaining</small></header>
+              <div id="incomeChart" class="line-chart"></div>
+            </article>
+            <article class="market-chart">
+              <header><div><span>Pension outlook</span><strong id="pensionChartHeadline">—</strong></div><small>Balance, your deposits and employer deposits</small></header>
+              <div id="pensionChart" class="line-chart"></div>
+            </article>
+          </div>
+          <div class="pension-health">
+            <div id="pensionHealthIndicator" class="health-indicator neutral"><span class="health-icon">●</span><div><strong id="pensionHealthLabel">Set a retirement target</strong><small id="pensionHealthDetail">Calculate to assess your target.</small></div></div>
+            <div class="health-stats"><div><span>Projected pot</span><strong id="healthPot">—</strong></div><div><span>Private income</span><strong id="healthPrivateIncome">—</strong></div><div><span>State Pension entered</span><strong id="healthStateIncome">—</strong></div><div><span>Combined income</span><strong id="healthCombined">—</strong></div><div><span>Gap or surplus</span><strong id="healthGap">—</strong></div></div>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-panel="car">
+          <div class="panel-heading"><div><p class="eyebrow">Optional estimate</p><h2>Car affordability</h2><p>See the full cost of the car, not only the finance payment.</p></div><span class="section-badge optional">Illustrative</span></div>
+          <div class="two-card-grid">
+            <article class="input-card"><div class="card-title"><span class="card-icon">£</span><div><h3>Purchase or finance</h3><p>The price, deposit and finance structure.</p></div></div><div class="form-grid single-column"><label>Purchase method<select id="carPurchaseType"><option value="finance">Finance</option><option value="cash">Cash purchase</option></select></label><label>Vehicle price (£)<input id="vehiclePrice" type="number" min="0" value="20000" /></label><label>Deposit (£)<input id="carDeposit" type="number" min="0" value="2000" /></label><label>Finance APR (%)<input id="carApr" type="number" min="0" max="50" step="0.1" value="7.9" /><small>Annual cost of borrowing used for this illustration.</small></label><label>Finance term (months)<input id="carTerm" type="number" min="1" max="120" value="48" /></label><label>Final or balloon payment (£)<input id="carBalloon" type="number" min="0" value="0" /></label><label>Cash ownership period (months)<input id="carOwnershipMonths" type="number" min="1" max="180" value="60" /></label></div></article>
+            <article class="input-card"><div class="card-title"><span class="card-icon">↗</span><div><h3>Running costs</h3><p>Regular costs beyond buying the car.</p></div></div><div class="form-grid single-column"><label>Insurance per month (£)<input id="carInsurance" type="number" min="0" value="80" /></label><label>Fuel or charging per month (£)<input id="carFuel" type="number" min="0" value="150" /></label><label>Vehicle tax per month (£)<input id="carTax" type="number" min="0" value="20" /></label><label>Maintenance per month (£)<input id="carMaintenance" type="number" min="0" value="50" /></label><label>Parking per month (£)<input id="carParking" type="number" min="0" value="0" /></label><label>Other car costs per month (£)<input id="carOther" type="number" min="0" value="0" /></label></div></article>
+          </div>
+          <button id="carCalculate" class="button primary standalone-button" type="button">Estimate car affordability</button>
+          <div id="carResults" class="result-dashboard muted"><p>Calculate your pay first, then run the car estimate.</p></div>
+        </section>
+
+        <section class="tab-panel" data-panel="mortgage">
+          <div class="panel-heading"><div><p class="eyebrow">Optional estimate</p><h2>Mortgage position</h2><p>Compare a property and deposit with an illustrative income range and monthly affordability.</p></div><span class="section-badge optional">Not an approval</span></div>
+          <div class="input-card">
+            <div class="form-grid">
+              <label>Applicant gross income (£)<input id="mortgageIncome1" type="number" min="0" value="30000" /><small>Updated from your wage calculation.</small></label>
+              <label>Second applicant gross income (£)<input id="mortgageIncome2" type="number" min="0" value="0" /></label>
+              <label>Property price (£)<input id="propertyPrice" type="number" min="0" value="250000" /></label>
+              <label>Deposit amount (£)<input id="mortgageDeposit" type="number" min="0" value="25000" /></label>
+              <label>Mortgage term (years)<input id="mortgageTerm" type="number" min="1" max="50" value="30" /></label>
+              <label>Illustrative interest rate (%)<input id="mortgageRate" type="number" min="0" max="20" step="0.1" value="5" /></label>
+            </div>
+          </div>
+          <details class="advanced-details">
+            <summary>Commitments and lending assumptions</summary>
+            <div class="details-body form-grid">
+              <label>Lower income multiple<input id="mortgageMinMultiple" type="number" min="1" max="10" step="0.1" value="4" /></label>
+              <label>Upper income multiple<input id="mortgageMaxMultiple" type="number" min="1" max="10" step="0.1" value="4.5" /></label>
+              <label>Existing debt payments per month (£)<input id="mortgageDebt" type="number" min="0" value="0" /></label>
+              <label>Car finance per month (£)<input id="mortgageCarFinance" type="number" min="0" value="0" /></label>
+              <label>Credit-card or loan payments per month (£)<input id="mortgageCredit" type="number" min="0" value="0" /></label>
+              <label>Childcare per month (£)<input id="mortgageChildcare" type="number" min="0" value="0" /></label>
+              <label>Other major commitments per month (£)<input id="mortgageOther" type="number" min="0" value="0" /></label>
+              <label class="check-label"><input id="mortgageUseSpending" type="checkbox" checked /> Include non-housing spending entered earlier</label>
+            </div>
+          </details>
+          <button id="mortgageCalculate" class="button primary standalone-button" type="button">Estimate mortgage position</button>
+          <div id="mortgageResults" class="result-dashboard muted"><p>Calculate your pay first, then run the mortgage estimate.</p></div>
+        </section>
+
+        <section class="tab-panel" data-panel="budget">
+          <div class="panel-heading"><div><p class="eyebrow">Personal overview</p><h2>Your budget guidance</h2><p>Simple observations based only on the figures entered in this session.</p></div><button class="button secondary recalculate" type="button">Update</button></div>
+          <div id="budgetDashboard" class="budget-grid"><article><span>Monthly take-home</span><strong>—</strong></article></div>
+          <div class="budget-columns"><article class="guidance-card"><h3>Practical next steps</h3><ul id="budgetTips"><li>Calculate your figures to receive tailored observations.</li></ul></article><article class="guidance-card"><h3>Five-year summary</h3><div id="fiveYearSummary" class="summary-list"></div></article></div>
+        </section>
+
+        <section class="tab-panel" data-panel="resources">
+          <div class="panel-heading"><div><p class="eyebrow">Independent support</p><h2>Helpful UK resources</h2><p>These links are not sponsored. Future commercial placements will always be labelled.</p></div></div>
+          <div class="resource-grid">
+            <a href="https://findajob.dwp.gov.uk/" target="_blank" rel="noopener noreferrer"><strong>Find a job</strong><span>Official UK job search</span></a>
+            <a href="https://nationalcareers.service.gov.uk/" target="_blank" rel="noopener noreferrer"><strong>National Careers Service</strong><span>Roles, skills and salaries</span></a>
+            <a href="https://www.skillsforcareers.education.gov.uk/" target="_blank" rel="noopener noreferrer"><strong>Skills for Careers</strong><span>Training and qualifications</span></a>
+            <a href="https://www.gov.uk/apply-apprenticeship" target="_blank" rel="noopener noreferrer"><strong>Apprenticeships</strong><span>Earn while training</span></a>
+            <a href="https://www.gov.uk/set-up-business" target="_blank" rel="noopener noreferrer"><strong>Start a business</strong><span>Official setup guidance</span></a>
+            <a href="https://www.gov.uk/benefits-calculators" target="_blank" rel="noopener noreferrer"><strong>Benefits calculators</strong><span>Check possible support</span></a>
+            <a href="https://www.moneyhelper.org.uk/en/pensions-and-retirement" target="_blank" rel="noopener noreferrer"><strong>Pension guidance</strong><span>Free MoneyHelper information</span></a>
+            <a href="https://www.moneyhelper.org.uk/en/money-troubles/dealing-with-debt" target="_blank" rel="noopener noreferrer"><strong>Debt support</strong><span>Free and confidential help</span></a>
+          </div>
+          <div class="ad-grid"><div><span>Advertisement</span><strong>Future Google Ads placement</strong><small>No advert or tracking is active.</small></div><div><span>Sponsored</span><strong>Future partner offer</strong><small>Commercial content will not affect results.</small></div><div><span>Sponsored</span><strong>Future financial tool</strong><small>Reserved for a labelled placement.</small></div></div>
+        </section>
+      </div>
+    </section>
+
+    <p class="legal-note">Estimates use standard 2026/27 Income Tax rates for England, Wales and Northern Ireland and employee NI category A. Scottish Income Tax is not supported. Real payslips, pension schemes and lender decisions can differ.</p>
+    <footer>Wage Wise stores no personal or financial data. Refreshing or closing the page clears the calculation.</footer>
   </main>
 
-  <footer class="site-footer">Estimates use standard 2026/27 Income Tax rates for England, Wales and Northern Ireland and employee NI category A. Scottish Income Tax is not supported. Real payslips, pension schemes and lender decisions can differ.</footer>
-  <script type="module" src="app-v2.js"></script>
+  <script type="module" src="app-v3.js"></script>
 </body>
 </html>
