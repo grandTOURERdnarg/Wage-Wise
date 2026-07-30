@@ -1,0 +1,32 @@
+.pension-year-view-v6{margin:0 0 26px;border:1px solid #cfc5f3;background:linear-gradient(145deg,#f8f5ff 0%,#fff 52%,#eff8f3 100%);box-shadow:0 20px 48px rgba(64,32,142,.1)}
+.pension-year-head-v6{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;padding:24px 26px;border-bottom:1px solid #ddd4f7}
+.pension-year-head-v6 h3{max-width:780px;margin:3px 0 8px;font-family:var(--ww-serif);font-size:clamp(1.9rem,3.3vw,3rem);font-weight:500;line-height:1.02;letter-spacing:-.03em;color:#25125e}
+.pension-year-head-v6 p:last-child{margin:0;color:#687386;font-size:.78rem}
+.pension-year-head-v6 label{min-width:190px;color:#40208e;font-size:.7rem;font-weight:850}
+.pension-year-head-v6 select{margin-top:7px;border-color:#b8a9eb;background:#fff}
+.pension-key-v6{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#dcd4f2;border-bottom:1px solid #dcd4f2}
+.pension-key-v6 article{padding:18px 22px;background:rgba(255,255,255,.93)}
+.pension-key-v6 span,.pension-key-v6 strong{display:block}
+.pension-key-v6 span{color:#6c6680;font-size:.65rem}
+.pension-key-v6 strong{margin-top:6px;font-family:var(--ww-serif);font-size:1.75rem;font-weight:600;color:#231052}
+.pension-key-main-v6{background:#40208e!important;color:#fff}
+.pension-key-main-v6 span{color:#dcd5f6}.pension-key-main-v6 strong{color:#fff}
+.pension-annual-chart-v6{padding:18px 20px 4px;background:radial-gradient(circle at 70% 10%,rgba(93,56,212,.1),transparent 34%),#fff}
+.pension-annual-chart-v6 svg{display:block;width:100%;min-height:320px}
+.pension-grid-v6{stroke:#e6e1f3;stroke-width:1}
+.pension-axis-v6{fill:#716b82;font-size:12px;font-family:Arial,sans-serif}
+.pension-point-v6{fill:#fff;stroke:#5d38d4;stroke-width:2}
+.pension-point-major-v6{fill:#ffd33d;stroke:#40208e;stroke-width:3}
+.pension-callout-v6 rect{fill:#25125e}.pension-callout-v6 text{fill:#fff;font-size:11px;font-weight:800;font-family:Arial,sans-serif}
+.annual-strip-head-v6{display:flex;justify-content:space-between;gap:16px;padding:13px 22px 6px;color:#5f5872;font-size:.68rem}
+.annual-strip-head-v6 strong{color:#25125e;font-size:.78rem}
+.pension-annual-strip-v6{display:flex;gap:9px;overflow-x:auto;padding:10px 22px 20px;scroll-snap-type:x proximity;scrollbar-color:#8d76d9 #eee9fb}
+.annual-card-v6{flex:0 0 145px;scroll-snap-align:start;padding:14px;border:1px solid #ded7f2;background:#fff}
+.annual-card-v6.start{background:#fff7d8;border-color:#efd979}
+.annual-card-v6 span,.annual-card-v6 strong,.annual-card-v6 small{display:block}
+.annual-card-v6 span{min-height:28px;color:#6c6680;font-size:.61rem}.annual-card-v6 strong{margin-top:5px;color:#25125e;font-size:1.02rem}.annual-card-v6 small{margin-top:5px;color:#34765a;font-weight:800}
+.pension-model-note-v6{margin:0;padding:13px 22px;border-top:1px solid #ddd4f7;background:#f0ecfb;color:#5f5872;font-size:.68rem;line-height:1.5}
+.pension-model-note-v6.warning{border-left:4px solid #d97706;background:#fff6df;color:#704a00}
+.future-pension-replaced-v6{background:linear-gradient(180deg,#fff,#f8f5ff)}
+.future-pension-caption-v6{margin:0;padding:0 18px 15px;color:#6c6680;font-size:.68rem}
+@media(max-width:800px){.pension-year-head-v6{display:block}.pension-year-head-v6 label{display:block;margin-top:16px}.pension-key-v6{grid-template-columns:1fr}.pension-key-v6 article{padding:14px 18px}.pension-annual-chart-v6{padding-inline:6px}.pension-annual-chart-v6 svg{min-height:270px}.annual-strip-head-v6{display:block}.annual-strip-head-v6 span{display:block;margin-top:3px}}
